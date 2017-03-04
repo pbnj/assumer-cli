@@ -1,5 +1,5 @@
 # assumer-cli
-> CLI for [assumer](https://github.com/devsecops/assumer-js) library
+> Assume IAM roles between AWS accounts
 
 [![NPM](https://nodei.co/npm/assumer-cli.png?downloads=true)](https://nodei.co/npm/assumer-cli/)
 
@@ -96,6 +96,9 @@ Sample configuration:
 }
 ```
 See [sample config file](.assumer.sample.json) for reference.
+
+## Related
+- [assumer-js](https://github.com/devsecops/assumer-js) - API for this module
 
 ## License
 
