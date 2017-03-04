@@ -1,0 +1,45 @@
+{
+  "name": "assumer-cli",
+  "version": "0.0.1",
+  "description": "Assume IAM roles between AWS accounts",
+  "main": "index.js",
+  "bin": {
+    "assumer": "index.js"
+  },
+  "scripts": {
+    "test": "snyk test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/petermbenjamin/assumer-cli.git"
+  },
+  "keywords": [
+    "assumer",
+    "assume",
+    "assume-roles",
+    "roles",
+    "iam",
+    "iam-roles",
+    "aws",
+    "devsecops"
+  ],
+  "author": "Peter Benjamin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/petermbenjamin/assumer-cli/issues"
+  },
+  "homepage": "https://github.com/petermbenjamin/assumer-cli#readme",
+  "dependencies": {
+    "assumer": "^0.1.0",
+    "chalk": "^1.1.3",
+    "inquirer": "^3.0.6",
+    "meow": "^3.7.0",
+    "open": "0.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.0",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0",
+    "snyk": "^1.25.1"
+  }
+}
