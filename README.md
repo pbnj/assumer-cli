@@ -1,7 +1,7 @@
 # assumer-cli
 > CLI for [assumer](https://github.com/devsecops/assumer-js) library
 
-[![NPM](https://nodei.co/npm/assumer-cli.png)](https://nodei.co/npm/assumer-cli/)
+[![NPM](https://nodei.co/npm/assumer-cli.png?downloads=true)](https://nodei.co/npm/assumer-cli/)
 
 [![Known Vulnerabilities](https://snyk.io/test/npm/assumer-cli/badge.svg?style=flat-square)](https://snyk.io/test/npm/assumer-cli)
 
