@@ -29,26 +29,30 @@ const cli = meow(`
     Example
       $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
 `, {
-  alias: {
-    a: 'target-account',
-    r: 'target-role',
-    A: 'control-account',
-    R: 'control-role',
-    u: 'username',
-    g: 'gui',
-    t: 'mfaToken',
-  },
-  string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
-  boolean: ['g'], // always treat these flags as Boolean type
-  default: {
-    u: os.userInfo().username,
-  },
-});
+    alias: {
+      a: 'target-account',
+      r: 'target-role',
+      A: 'control-account',
+      R: 'control-role',
+      u: 'username',
+      g: 'gui',
+      t: 'mfaToken',
+    },
+    string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
+    boolean: ['g'], // always treat these flags as Boolean type
+    default: {
+      u: os.userInfo().username,
+    },
+  });
 
 const { username } = cli.flags;
 
 // load config file
 const config = util.loadConfig();
+const controlAccounts = config.control.accounts.map(acct => acct)
+const controlRoles = config.control.roles.map(role => role)
+const targetAccounts = config.target.accounts.map(acct => acct);
+const targetRoles = config.target.roles.map(role => role);
 
 // questions to prompt user interactively
 const questions = [
@@ -56,26 +60,25 @@ const questions = [
     type: 'list',
     name: 'controlAccount',
     message: 'Control Account',
-    choices: config.control.accounts.map(acct => acct),
+    choices: controlAccounts,
   },
   {
     type: 'list',
     name: 'controlRole',
     message: 'Control Role',
-    choices: config.control.roles.map(role => role),
+    choices: controlRoles,
   },
   {
     type: 'list',
     name: 'targetAccount',
     message: 'Target Account',
-    choices: config.target.accounts.map(acct => acct),
-    filter: val => val.toLowerCase(),
+    choices: targetAccounts,
   },
   {
     type: 'list',
     name: 'targetRole',
     message: 'Target Role',
-    choices: config.target.roles.map(role => role),
+    choices: targetRoles,
   },
   {
     type: 'input',
@@ -93,8 +96,11 @@ const questions = [
 ];
 
 // If no flags or input are passed, prompt user interactively
-if ((!cli.flags.controlAccount || !cli.flags.targetAccount ||
-  !cli.flags.controlRole || !cli.flags.targetRole) && cli.input.length === 0) {
+if ((!cli.flags.controlAccount || 
+     !cli.flags.targetAccount ||
+     !cli.flags.controlRole || 
+     !cli.flags.targetRole) && 
+     cli.input.length === 0) {
   inquirer.prompt(questions).then((response) => {
     let { controlRole, targetRole } = response;
     const { controlAccount, targetAccount, mfaToken } = response;
@@ -120,8 +126,11 @@ if ((!cli.flags.controlAccount || !cli.flags.targetAccount ||
 }
 
 // if required flags are passed
-if ((cli.flags.controlAccount && cli.flags.targetAccount &&
-  cli.flags.controlRole && cli.flags.targetRole) && cli.input.length === 0) {
+if (cli.flags.controlAccount &&
+    cli.flags.targetAccount &&
+    cli.flags.controlRole &&
+    cli.flags.targetRole &&
+    cli.input.length === 0) {
   const { controlAccount, targetAccount } = cli.flags;
   let { controlRole, targetRole, mfaToken } = cli.flags;
 
@@ -142,7 +151,8 @@ if ((cli.flags.controlAccount && cli.flags.targetAccount &&
           targetAccount,
           targetRole,
           username,
-          mfaToken });
+          mfaToken
+        });
       })
       .then(results => console.log(results))
       .catch(err => util.error(err));
