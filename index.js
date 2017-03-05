@@ -29,28 +29,28 @@ const cli = meow(`
     Example
       $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
 `, {
-    alias: {
-      a: 'target-account',
-      r: 'target-role',
-      A: 'control-account',
-      R: 'control-role',
-      u: 'username',
-      g: 'gui',
-      t: 'mfaToken',
-    },
-    string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
-    boolean: ['g'], // always treat these flags as Boolean type
-    default: {
-      u: os.userInfo().username,
-    },
-  });
+  alias: {
+    a: 'target-account',
+    r: 'target-role',
+    A: 'control-account',
+    R: 'control-role',
+    u: 'username',
+    g: 'gui',
+    t: 'mfaToken',
+  },
+  string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
+  boolean: ['g'], // always treat these flags as Boolean type
+  default: {
+    u: os.userInfo().username,
+  },
+});
 
 const { username } = cli.flags;
 
 // load config file
 const config = util.loadConfig();
-const controlAccounts = config.control.accounts.map(acct => acct)
-const controlRoles = config.control.roles.map(role => role)
+const controlAccounts = config.control.accounts.map(acct => acct);
+const controlRoles = config.control.roles.map(role => role);
 const targetAccounts = config.target.accounts.map(acct => acct);
 const targetRoles = config.target.roles.map(role => role);
 
@@ -96,10 +96,10 @@ const questions = [
 ];
 
 // If no flags or input are passed, prompt user interactively
-if ((!cli.flags.controlAccount || 
+if ((!cli.flags.controlAccount ||
      !cli.flags.targetAccount ||
-     !cli.flags.controlRole || 
-     !cli.flags.targetRole) && 
+     !cli.flags.controlRole ||
+     !cli.flags.targetRole) &&
      cli.input.length === 0) {
   inquirer.prompt(questions).then((response) => {
     let { controlRole, targetRole } = response;
@@ -151,7 +151,7 @@ if (cli.flags.controlAccount &&
           targetAccount,
           targetRole,
           username,
-          mfaToken
+          mfaToken,
         });
       })
       .then(results => console.log(results))
