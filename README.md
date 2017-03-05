@@ -14,7 +14,7 @@ npm i -g assumer-cli
 
 ## Usage
 
-```
+```sh
 ❯ assumer --help
 
   Assume IAM roles between AWS accounts
@@ -43,7 +43,7 @@ npm i -g assumer-cli
 
 If you want to use the CLI in interactive mode, `assumer` expects a config file called `.assumer.json` in your home directory.
 Sample configuration:
-```
+```json
 {
   "control": {
     "accounts": [
