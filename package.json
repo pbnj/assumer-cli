@@ -7,7 +7,8 @@
     "assumer": "index.js"
   },
   "scripts": {
-    "test": "snyk test"
+    "test": "nsp check",
+    "prepublish": "npm test"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,6 @@
     "eslint": "^3.17.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-import": "^2.2.0",
-    "snyk": "^1.25.1"
+    "nsp": "^2.6.2"
   }
 }
