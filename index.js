@@ -13,7 +13,6 @@ const util = require('./util');
 const cli = meow(`
     Usage
       $ assumer
-      $ assumer <flags>
 
     Required Flags
       -a, --target-account    Target Account Number
@@ -27,6 +26,7 @@ const cli = meow(`
       -t, --token             MFA Token (you will be interactively prompted)
 
     Example
+      $ assumer # interactive mode
       $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
 `, {
   alias: {
@@ -59,30 +59,30 @@ const questions = [
   {
     type: 'list',
     name: 'controlAccount',
-    message: 'Control Account',
+    message: 'Control Account:',
     choices: controlAccounts,
   },
   {
     type: 'list',
     name: 'controlRole',
-    message: 'Control Role',
+    message: 'Control Role:',
     choices: controlRoles,
   },
   {
     type: 'list',
     name: 'targetAccount',
-    message: 'Target Account',
+    message: 'Target Account:',
     choices: targetAccounts,
   },
   {
     type: 'list',
     name: 'targetRole',
-    message: 'Target Role',
+    message: 'Target Role:',
     choices: targetRoles,
   },
   {
     type: 'input',
-    message: 'MFA Token',
+    message: 'MFA Token:',
     name: 'mfaToken',
     validate: (value) => {
       const pass = value.match(/^\d{6}$/i);
@@ -93,44 +93,60 @@ const questions = [
       return 'Invalid MFA Token. Must be 6-digit token';
     },
   },
+  {
+    type: 'confirm',
+    message: 'Launch AWS Console in browser?',
+    name: 'gui',
+    default: true,
+  },
 ];
 
 // If no flags or input are passed, prompt user interactively
 if ((!cli.flags.controlAccount ||
-     !cli.flags.targetAccount ||
-     !cli.flags.controlRole ||
-     !cli.flags.targetRole) &&
-     cli.input.length === 0) {
-  inquirer.prompt(questions).then((response) => {
-    let { controlRole, targetRole } = response;
-    const { controlAccount, targetAccount, mfaToken } = response;
+  !cli.flags.targetAccount ||
+  !cli.flags.controlRole ||
+  !cli.flags.targetRole) &&
+  cli.input.length === 0) {
+  // prompt questions
+  inquirer.prompt(questions)
+    // handle response
+    .then((response) => {
+      let { controlRole, targetRole } = response;
+      const { controlAccount, targetAccount, mfaToken } = response;
 
-    // Replace wildcards in role names
-    const requestedTarget = config.target.accounts.find(acct => acct.value === targetAccount);
-    if (controlRole.indexOf('$$$') > -1) controlRole = controlRole.replace(/\$\$\$/g, requestedTarget.name);
-    if (targetRole.indexOf('$$$') > -1) targetRole = targetRole.replace(/\$\$\$/g, requestedTarget.name);
+      // Replace wildcards in role names
+      const requestedTarget = config.target.accounts.find(acct => acct.value === targetAccount);
+      if (controlRole.indexOf('$$$') > -1) controlRole = controlRole.replace(/\$\$\$/g, requestedTarget.name);
+      if (targetRole.indexOf('$$$') > -1) targetRole = targetRole.replace(/\$\$\$/g, requestedTarget.name);
 
-    console.log(`${chalk.yellow(username)} is assuming ${chalk.yellow(targetRole)} role into ${chalk.yellow(targetAccount)} account`);
-    return assume({ controlAccount, controlRole, targetAccount, targetRole, username, mfaToken });
-  })
-    .then((creds) => {
-      if (cli.flags.gui) {
+      console.log(`${chalk.yellow(username)} is assuming ${chalk.yellow(targetRole)} role into ${chalk.yellow(targetAccount)} account`);
+      return Promise.all([
+        response,
+        assume({ controlAccount, controlRole, targetAccount, targetRole, username, mfaToken }),
+      ]);
+    })
+    // determine whether to open console in browser
+    .then((results) => {
+      const [response, creds] = results;
+
+      util.sourceCredentials(creds).then(file => console.log(chalk.green(file)));
+
+      if (response.gui) {
         util.generateURL(creds).then((url) => {
           console.log(chalk.green(url));
           open(url);
         });
       }
-      util.sourceCredentials(creds).then(file => console.log(chalk.green(file)));
     })
     .catch(err => util.error(err));
 }
 
 // if required flags are passed
 if (cli.flags.controlAccount &&
-    cli.flags.targetAccount &&
-    cli.flags.controlRole &&
-    cli.flags.targetRole &&
-    cli.input.length === 0) {
+  cli.flags.targetAccount &&
+  cli.flags.controlRole &&
+  cli.flags.targetRole &&
+  cli.input.length === 0) {
   const { controlAccount, targetAccount } = cli.flags;
   let { controlRole, targetRole, mfaToken } = cli.flags;
 
