@@ -3,6 +3,8 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const open = require('opn');
+const chalk = require('chalk');
 
 /**
  * Load configuration file
@@ -18,23 +20,29 @@ exports.loadConfig = () => {
  * Write credentials to temp file
  * @param {object} creds - Object representing target account credentials obtained from AWS
  */
-exports.sourceCredentials = ({ AccessKeyId, SecretAccessKey, SessionToken, Region }) => new Promise((resolve, reject) => {
+exports.sourceCredentials = ({ AccessKeyId, SecretAccessKey, SessionToken, Region }) => {
   const data = `export AWS_REGION=${Region || 'us-west-2'}
 export AWS_ACCESS_KEY_ID=${AccessKeyId}
 export AWS_SECRET_ACCESS_KEY=${SecretAccessKey}
-export AWS_SESSION_TOKEN=${SessionToken}`;
+export AWS_SESSION_TOKEN=${SessionToken}
+unassumer(){
+    unset AWS_REGION
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_SECRET_ACCESS_KEY
+    unset AWS_SESSION_TOKEN
+}`;
   fs.writeFile(path.resolve(os.tmpdir(), 'tmp-assumer-credentials'), data, (err) => {
-    if (err) reject(err);
+    if (err) console.log(chalk.red(err));
     const tmpFile = path.resolve(os.tmpdir(), 'tmp-assumer-credentials');
-    resolve(`source '${tmpFile}'`);
+    console.log(chalk.green('COMMAND:'), `source '${tmpFile}'`);
   });
-});
+};
 
 /**
  * Generate Sign-in URL
  * @param {object} creds - Object representing target account credentials obtained from AWS
  */
-exports.generateURL = ({ AccessKeyId, SecretAccessKey, SessionToken }) => new Promise((resolve, reject) => {
+exports.generateURL = ({ AccessKeyId, SecretAccessKey, SessionToken }) => {
   const issuer = 'assumer';
   const consoleURL = 'https://console.aws.amazon.com/';
   const signinURL = 'https://signin.aws.amazon.com/federation';
@@ -56,9 +64,10 @@ exports.generateURL = ({ AccessKeyId, SecretAccessKey, SessionToken }) => new Pr
       const issuerParam = `&Issuer=${issuer}`;
       const destParam = `&Destination=${consoleURL}`;
       const loginURL = `${signinURL}?Action=login${signinTokenParam}${issuerParam}${destParam}`;
-      resolve(loginURL);
+      console.log(chalk.green('URL:'), loginURL);
+      open(loginURL, { wait: false });
     });
   });
-  req.on('error', err => reject(err));
+  req.on('error', err => console.log(chalk.red(err)));
   req.end();
-});
+};

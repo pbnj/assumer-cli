@@ -5,7 +5,6 @@ const assume = require('assumer');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const meow = require('meow');
-const open = require('open');
 const os = require('os');
 const util = require('./util');
 
@@ -128,15 +127,8 @@ if ((!cli.flags.controlAccount ||
     // determine whether to open console in browser
     .then((results) => {
       const [response, creds] = results;
-
-      util.sourceCredentials(creds).then(file => console.log(chalk.green(file)));
-
-      if (response.gui) {
-        util.generateURL(creds).then((url) => {
-          console.log(chalk.green(url));
-          open(url);
-        });
-      }
+      util.sourceCredentials(creds);
+      if (response.gui) util.generateURL(creds);
     })
     .catch(err => util.error(err));
 }
@@ -158,8 +150,8 @@ if (cli.flags.controlAccount &&
   // if no token is passed, prompt user
   if (mfaToken === undefined) {
     inquirer.prompt([questions.find(field => field.name === 'mfaToken')])
-      .then((answer) => {
-        mfaToken = answer.mfaToken;
+      .then((response) => {
+        mfaToken = response.mfaToken;
         console.log(`${chalk.yellow(username)} is assuming ${chalk.yellow(targetRole)} role into ${chalk.yellow(targetAccount)} account`);
         return assume({
           controlAccount,
@@ -170,10 +162,13 @@ if (cli.flags.controlAccount &&
           mfaToken,
         });
       })
-      .then(results => console.log(results))
+      .then((creds) => {
+        if (cli.flags.gui) util.generateURL(creds);
+        util.sourceCredentials(creds);
+      })
       .catch(err => util.error(err));
 
-    // if all flags are passed, then assume
+    // if all flags are passed, including token, then assume
   } else {
     assume({ controlAccount, controlRole, targetAccount, targetRole, username, mfaToken })
       .then(results => console.log(results))
