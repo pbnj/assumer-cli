@@ -130,7 +130,7 @@ if ((!cli.flags.controlAccount ||
       util.sourceCredentials(creds);
       if (response.gui) util.generateURL(creds);
     })
-    .catch(err => util.error(err));
+    .catch(err => console.log(chalk.red(err)));
 }
 
 // if required flags are passed
@@ -166,12 +166,12 @@ if (cli.flags.controlAccount &&
         if (cli.flags.gui) util.generateURL(creds);
         util.sourceCredentials(creds);
       })
-      .catch(err => util.error(err));
+      .catch(err => console.log(chalk.red(err)));
 
     // if all flags are passed, including token, then assume
   } else {
     assume({ controlAccount, controlRole, targetAccount, targetRole, username, mfaToken })
       .then(results => console.log(results))
-      .catch(err => util.error(err));
+      .catch(err => console.log(chalk.red(err)));
   }
 }
