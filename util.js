@@ -26,7 +26,7 @@ export AWS_SESSION_TOKEN=${SessionToken}`;
   fs.writeFile(path.resolve(os.tmpdir(), 'tmp-assumer-credentials'), data, (err) => {
     if (err) reject(err);
     const tmpFile = path.resolve(os.tmpdir(), 'tmp-assumer-credentials');
-    resolve(`source ${tmpFile}`);
+    resolve(`source '${tmpFile}'`);
   });
 });
 
