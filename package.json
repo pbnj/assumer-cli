@@ -1,6 +1,6 @@
 {
   "name": "assumer-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Assume IAM roles between AWS accounts",
   "main": "index.js",
   "bin": {
