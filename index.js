@@ -27,7 +27,7 @@ const cli = meow(`
     Example
       $ assumer # interactive mode
       $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
-
+      
 `, {
   alias: {
     a: 'target-account',
