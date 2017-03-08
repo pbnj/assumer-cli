@@ -6,7 +6,12 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const meow = require('meow');
 const os = require('os');
+const updateNotifier = require('update-notifier');
 const util = require('./util');
+const pkg = require('./package.json');
+
+// check for updates and notify user
+updateNotifier({ pkg }).notify();
 
 // setup CLI flags
 const cli = meow(`
