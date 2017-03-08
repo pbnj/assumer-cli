@@ -102,4 +102,4 @@ See [sample config file](.assumer.sample.json) for reference.
 
 ## License
 
-MIT © [Peter Benjamin](https://pmbenjamin.github.io/)
+MIT © [Peter Benjamin](https://petermbenjamin.github.io/)
