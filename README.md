@@ -6,6 +6,13 @@
 [![Known Vulnerabilities](https://snyk.io/test/github/petermbenjamin/assumer-cli/badge.svg)](https://snyk.io/test/github/petermbenjamin/assumer-cli)
 [![NSP Status](https://nodesecurity.io/orgs/petermbenjamin/projects/380f367c-8901-4277-b402-55cdc0eff835/badge)](https://nodesecurity.io/orgs/petermbenjamin/projects/380f367c-8901-4277-b402-55cdc0eff835)
 
+## Features
+
+- Interactive user prompt
+- Account search autocompletion
+- Generates & opens AWS Console URL in default browser
+- Generates script for users to source in their current terminal session
+
 ## Install
 
 ```
