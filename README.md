@@ -11,7 +11,7 @@
 - Interactive user prompt
 - Account search autocompletion
 - Generates & opens AWS Console URL in default browser
-- Generates script for users to source in their current terminal session
+- Generates script for users to source in their current terminal session (supported platforms: Windows, Linux, Darwin)
 
 ## Install
 
@@ -46,6 +46,21 @@ npm i -g assumer-cli
     $ assumer # interactive mode
     $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
 ```
+
+### Examples
+- If you know the account numbers and role names you wish to assume:
+  ```
+  $ assumer -a <target-account> -r <target-role> -A <control-account> -R <control-role>
+  ```
+- If you don't know the account numbers and role names:
+  ```
+  $ assumer
+  ```
+- To check if there is a new version of `assumer-cli`:
+  ```
+  $ assumer --check
+  ```
+  ![check version](img/assumer-check.png)
 
 ## Configuration
 
