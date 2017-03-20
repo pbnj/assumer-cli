@@ -40,6 +40,7 @@ npm i -g assumer-cli
     -u, --username          An AWS IAM username (defaults to system user name)
     -g, --gui               Open a web browser to the AWS console with these credentials
     -t, --token             MFA Token (you will be interactively prompted)
+    --check                 Check for new versions
 
   Example
     $ assumer # interactive mode
