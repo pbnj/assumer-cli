@@ -2,12 +2,12 @@
 
 const meow = require('meow');
 const os = require('os');
-const updateNotifier = require('update-notifier');
 const util = require('./lib/util');
 const prompt = require('./lib/prompt');
 
 // setup CLI flags
-const cli = meow(`
+const cli = meow(
+  `
     Usage
       $ assumer
 
@@ -21,30 +21,35 @@ const cli = meow(`
       -u, --username          An AWS IAM username (defaults to system user name)
       -g, --gui               Open a web browser to the AWS console with these credentials
       -t, --token             MFA Token (you will be interactively prompted)
+      --check                 Check for new versions
 
     Example
       $ assumer # interactive mode
       $ assumer -a 111111111111 -r target/role -A 123456789012 -R control/role
 
-`, {
-  alias: {
-    a: 'target-account',
-    r: 'target-role',
-    A: 'control-account',
-    R: 'control-role',
-    u: 'username',
-    g: 'gui',
-    t: 'mfaToken',
-  },
-  string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
-  boolean: ['g'], // always treat these flags as Boolean type
-  default: {
-    u: os.userInfo().username,
-  },
-});
+`,
+  {
+    alias: {
+      a: 'target-account',
+      r: 'target-role',
+      A: 'control-account',
+      R: 'control-role',
+      u: 'username',
+      g: 'gui',
+      t: 'mfaToken',
+    },
+    string: ['a', 'r', 'A', 'R', 'u', 't'], // always treat these flags as String type, not Number type
+    boolean: ['g', 'check'], // always treat these flags as Boolean type
+    default: {
+      u: os.userInfo().username,
+    },
+  });
 
 // check for updates and notify user
-updateNotifier({ pkg: cli.pkg }).notify();
+if (cli.flags.check) {
+  util.checkUpgrade({ pkg: cli.pkg });
+  process.exit();
+}
 
 const requiredFlagsExist = util.requiredCliFlagsExist(cli);
 
