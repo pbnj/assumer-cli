@@ -21,7 +21,7 @@ npm i -g assumer-cli
 
 ## Usage
 
-```sh
+```
 ❯ assumer --help
 
   Assume IAM roles between AWS accounts
