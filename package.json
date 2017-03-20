@@ -4,12 +4,12 @@
   "description": "Assume IAM roles between AWS accounts",
   "main": "index.js",
   "bin": {
-    "assumer": "index.js"
+    "assumer": "cli.js"
   },
   "scripts": {
-    "nsp": "nsp check",
-    "snyk": "snyk test",
-    "test": "npm run nsp && npm run snyk",
+    "security": "snyk test",
+    "lint": "eslint .",
+    "test": "npm run security && npm run lint",
     "prepublish": "npm test"
   },
   "repository": {
@@ -45,7 +45,6 @@
     "eslint": "^3.17.0",
     "eslint-config-airbnb-base": "^11.1.1",
     "eslint-plugin-import": "^2.2.0",
-    "nsp": "^2.6.2",
     "snyk": "^1.25.2"
   }
 }
