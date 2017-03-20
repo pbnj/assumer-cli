@@ -105,9 +105,9 @@ assert-plus@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-0.2.0.tgz#d74e1b87e7affc0db8aadb7021f3fe48101ab234"
 
-assumer@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/assumer/-/assumer-0.2.0.tgz#ba5ea556e9a7f5785fd4b7cb79d1fc3d578f728d"
+assumer@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/assumer/-/assumer-0.2.1.tgz#59e492a4efd53d2baa2d17dac057a9ef110a2471"
   dependencies:
     aws-sdk "^2.22.0"
 
