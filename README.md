@@ -1,4 +1,6 @@
 # assumer-cli
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/petermbenjamin/assumer-cli.svg)](https://greenkeeper.io/)
 > Assume IAM roles between AWS accounts
 
 [![NPM](https://nodei.co/npm/assumer-cli.png?downloads=true)](https://nodei.co/npm/assumer-cli/)
